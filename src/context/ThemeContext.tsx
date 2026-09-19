@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 type Theme = 'dark' | 'light';
 
@@ -23,8 +23,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return 'dark';
   });
 
+  // Mirrors `theme` synchronously so rapid toggles in the same tick don't read
+  // a stale value out of the render closure.
+  const currentThemeRef = useRef<Theme>(theme);
+
+  // Identifies the most recent view transition so a superseded one can't strip
+  // the helper class off the transition that replaced it.
+  const transitionTokenRef = useRef(0);
+
   useEffect(() => {
     const root = document.documentElement;
+    currentThemeRef.current = theme;
     if (theme === 'dark') {
       root.classList.add('dark');
     } else {
@@ -34,8 +43,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [theme]);
 
   const toggleTheme = (e?: React.MouseEvent) => {
-    const isGoingDark = theme === 'light';
-    const newTheme = isGoingDark ? 'dark' : 'light';
+    const isGoingDark = currentThemeRef.current === 'light';
+    const newTheme: Theme = isGoingDark ? 'dark' : 'light';
+    currentThemeRef.current = newTheme;
 
     // Get circle origin from the clicked button's center
     let x = window.innerWidth - 40;
@@ -55,57 +65,70 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const supportsViewTransition = 'startViewTransition' in document;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (supportsViewTransition && !prefersReducedMotion) {
-      // Telegram-style circular reveal via View Transition API
-      // When going to light mode, we need the OLD snapshot (dark) on top
-      // so we can animate its clip-path from full → zero (contracting).
-      // The CSS `.light-transition` class flips the z-index stacking.
-      if (!isGoingDark) {
-        document.documentElement.classList.add('light-transition');
-      }
+    if (!supportsViewTransition || prefersReducedMotion) {
+      // Fallback: instant toggle for unsupported browsers or reduced motion
+      setThemeState(newTheme);
+      return;
+    }
 
-      const transition = (document as any).startViewTransition(() => {
+    const token = ++transitionTokenRef.current;
+    const releaseHelperClass = () => {
+      // A newer toggle owns the class now; leave it alone.
+      if (transitionTokenRef.current !== token) return;
+      document.documentElement.classList.remove('light-transition');
+    };
+
+    // Telegram-style circular reveal via View Transition API.
+    // When going to light mode we need the OLD snapshot (dark) on top so we can
+    // animate its clip-path from full → zero (contracting). The CSS
+    // `.light-transition` class flips the z-index stacking. Set it on every
+    // toggle rather than only adding it, so an interrupted light transition
+    // can't leave the stacking inverted for the dark transition that follows.
+    document.documentElement.classList.toggle('light-transition', !isGoingDark);
+
+    let transition: { ready: Promise<void>; finished: Promise<void> };
+    try {
+      transition = (document as any).startViewTransition(() => {
         // Synchronously toggle the dark class so the API captures the new state
         document.documentElement.classList.toggle('dark', newTheme === 'dark');
         setThemeState(newTheme);
       });
-
-      transition.ready.then(() => {
-        const clipExpanded = `circle(${maxRadius}px at ${x}px ${y}px)`;
-        const clipCollapsed = `circle(0px at ${x}px ${y}px)`;
-
-        document.documentElement.animate(
-          {
-            clipPath: isGoingDark
-              ? [clipCollapsed, clipExpanded]   // Dark expands outward from button
-              : [clipExpanded, clipCollapsed]   // Light contracts back toward button
-          },
-          {
-            duration: 450,
-            easing: 'ease-out',
-            fill: 'forwards',
-            pseudoElement: isGoingDark
-              ? '::view-transition-new(root)'   // Animate the new (dark) snapshot expanding
-              : '::view-transition-old(root)'   // Animate the old (dark) snapshot contracting
-          }
-        );
-      }).catch(() => {
-        // Transition was skipped or interrupted — theme is already applied
-      });
-
-      // Clean up the helper class after the transition completes
-      transition.finished.then(() => {
-        document.documentElement.classList.remove('light-transition');
-      }).catch(() => {
-        document.documentElement.classList.remove('light-transition');
-      });
-    } else {
-      // Fallback: instant toggle for unsupported browsers or reduced motion
+    } catch {
+      // Never let a transition failure leave the theme unchanged
+      releaseHelperClass();
       setThemeState(newTheme);
+      return;
     }
+
+    transition.ready.then(() => {
+      const clipExpanded = `circle(${maxRadius}px at ${x}px ${y}px)`;
+      const clipCollapsed = `circle(0px at ${x}px ${y}px)`;
+
+      document.documentElement.animate(
+        {
+          clipPath: isGoingDark
+            ? [clipCollapsed, clipExpanded]   // Dark expands outward from button
+            : [clipExpanded, clipCollapsed]   // Light contracts back toward button
+        },
+        {
+          duration: 450,
+          easing: 'ease-out',
+          fill: 'forwards',
+          pseudoElement: isGoingDark
+            ? '::view-transition-new(root)'   // Animate the new (dark) snapshot expanding
+            : '::view-transition-old(root)'   // Animate the old (dark) snapshot contracting
+        }
+      );
+    }).catch(() => {
+      // Transition was skipped or interrupted — theme is already applied
+    });
+
+    // Clean up the helper class after the transition completes
+    transition.finished.then(releaseHelperClass, releaseHelperClass);
   };
 
   const setTheme = (newTheme: Theme) => {
+    currentThemeRef.current = newTheme;
     setThemeState(newTheme);
   };
 
