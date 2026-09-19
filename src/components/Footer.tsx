@@ -1,8 +1,11 @@
 import React from 'react';
 import { GithubLogo, ArrowUp } from '@phosphor-icons/react';
+import { useTheme } from '../context/ThemeContext';
 
 
 export const Footer: React.FC = () => {
+  const { theme } = useTheme();
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -25,7 +28,7 @@ export const Footer: React.FC = () => {
           <div className="md:col-span-6 space-y-3">
             <div className="flex items-center gap-2.5">
               <div className="h-7 w-7 rounded flex items-center justify-center overflow-hidden">
-                <img src="/favicon.png" alt="Logo" className="w-7 h-7 object-contain" />
+                <img src={theme === 'dark' ? '/favicon-dark.png' : '/favicon-light.png'} alt="Logo" className="w-7 h-7 object-contain" />
               </div>
               <span className="text-sm font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
                 Job Eligibility Checker

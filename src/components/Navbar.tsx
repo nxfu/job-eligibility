@@ -80,7 +80,7 @@ export const Navbar: React.FC = () => {
             onClick={() => scrollToSection('hero')}
           >
             <div className="h-8 w-8 rounded flex items-center justify-center shadow-sm transition-transform duration-200 group-hover:scale-105 overflow-hidden">
-              <img src="/favicon.png" alt="Logo" className="w-8 h-8 object-contain" />
+              <img src={theme === 'dark' ? '/favicon-dark.png' : '/favicon-light.png'} alt="Logo" className="w-8 h-8 object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 font-sans">
