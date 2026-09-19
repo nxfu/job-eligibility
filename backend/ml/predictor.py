@@ -64,8 +64,17 @@ class ModelPredictor:
                 "Attempting automated on-the-fly model training..."
             )
             try:
-                from backend.ml.train_model import train_and_save_model
-                train_and_save_model(output_path=default_model_path)
+                from backend.ml.train_model import (
+                    generate_synthetic_dataset,
+                    train_and_evaluate_models,
+                )
+
+                dataset_path = os.path.join(base_dir, "data", "eligibility_dataset.csv")
+                train_and_evaluate_models(
+                    generate_synthetic_dataset(n_samples=2000, random_seed=42),
+                    default_model_path,
+                    dataset_path,
+                )
                 resolved_path = default_model_path
             except Exception as train_err:
                 logger.error(f"On-demand model training failed: {train_err}")
@@ -73,8 +82,9 @@ class ModelPredictor:
                 return
 
         try:
-            self._artifact = joblib.load(resolved_path)
-            logger.info(f"Loaded ML model '{self._artifact.get('model_name')}' from '{resolved_path}'.")
+            artifact = joblib.load(resolved_path)
+            self._artifact = artifact
+            logger.info(f"Loaded ML model '{artifact.get('model_name')}' from '{resolved_path}'.")
         except Exception as e:
             logger.error(f"Failed to load model from '{resolved_path}': {e}")
             self._artifact = None
@@ -107,7 +117,8 @@ class ModelPredictor:
         feats = extract_features_from_profile(profile_data)
         X = np.array([[feats[col] for col in FEATURE_COLUMNS]], dtype=np.float32)
 
-        if not self.is_loaded:
+        artifact = self._artifact
+        if artifact is None:
             # Fallback heuristic if model file isn't loaded
             logger.warning("Predictor using fallback heuristic (model not loaded).")
             core_cov = feats["core_skill_coverage"]
@@ -130,8 +141,8 @@ class ModelPredictor:
                 "features": feats
             }
 
-        pipeline = self._artifact["pipeline"]
-        tier_labels = self._artifact["tier_labels"]
+        pipeline = artifact["pipeline"]
+        tier_labels = artifact["tier_labels"]
 
         # Run model inference
         y_pred_idx = int(pipeline.predict(X)[0])

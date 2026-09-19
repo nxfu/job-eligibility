@@ -2,7 +2,7 @@ import time
 import uuid
 import datetime
 import math
-from typing import Dict, Any, List
+from typing import Optional
 
 from backend.schemas.eligibility import (
     CandidateProfileRequest,
@@ -30,7 +30,7 @@ class EligibilityEngine:
     4. Exact contract payload generation matching the frontend TypeScript interface.
     """
 
-    def __init__(self, predictor: ModelPredictor = None, api_version: str = "v1.4.2-py"):
+    def __init__(self, predictor: Optional[ModelPredictor] = None, api_version: str = "v1.4.2-py"):
         self.predictor = predictor or ModelPredictor()
         self.api_version = api_version
         self.engine_name = f"ML-{self.predictor.model_name.replace(' ', '')}-v1"

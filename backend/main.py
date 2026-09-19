@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from contextlib import asynccontextmanager
 
 # Ensure repository root and backend directory are in sys.path
@@ -34,7 +34,7 @@ logging.basicConfig(
 logger = logging.getLogger("job_checker_api")
 
 # Global engine reference
-engine: EligibilityEngine = None
+engine: Optional[EligibilityEngine] = None
 
 
 def get_engine() -> EligibilityEngine:
