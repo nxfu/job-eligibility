@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Lightning } from '@phosphor-icons/react';
 import { motion, useReducedMotion } from 'motion/react';
 import { fadeInUpVariants, viewportConfig } from '../utils/motion';
 
@@ -21,7 +21,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onCheckClick }) => {
       >
         
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-[11px] font-mono text-zinc-600 dark:text-zinc-400 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
-          <Zap className="w-3.5 h-3.5" />
+          <Lightning className="w-3.5 h-3.5" weight="bold" />
           <span>ZERO REGISTRATION BARRIER • INSTANT REPORT</span>
         </div>
 
@@ -42,13 +42,13 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ onCheckClick }) => {
             className="inline-flex items-center gap-2 px-6 py-3 rounded text-sm font-semibold bg-zinc-950 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-colors border border-zinc-900 dark:border-zinc-200 shadow-sm"
           >
             <span>Check My Eligibility</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4" weight="bold" />
           </motion.button>
         </div>
 
         <div className="pt-4 flex items-center justify-center gap-6 text-[11px] font-mono text-zinc-400">
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-zinc-500" />
+            <ShieldCheck className="w-3.5 h-3.5 text-zinc-500" weight="bold" />
             <span>Confidential &amp; Client-Side Secure</span>
           </div>
           <span>•</span>

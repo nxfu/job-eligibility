@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowRight, 
-  Sparkles, 
+  Sparkle, 
   Plus, 
   X, 
-  AlertCircle,
-  RotateCcw
-} from 'lucide-react';
+  WarningCircle,
+  ArrowCounterClockwise
+} from '@phosphor-icons/react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { CandidateProfile, EligibilityAnalysisResult, JobRoleKey } from '../types/eligibility';
 import { 
@@ -283,7 +283,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
           {/* Quick Demo Pre-fill helper */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-zinc-200 dark:border-zinc-800">
             <div className="flex items-center gap-1.5 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
+              <Sparkle className="w-3.5 h-3.5 text-cyan-500" weight="bold" />
               <span>QUICK TEST PRESETS:</span>
             </div>
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -307,7 +307,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
               className="mb-6 p-4 rounded-lg border border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-rose-800 dark:text-rose-300"
             >
               <div className="flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                <WarningCircle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" weight="bold" />
                 <div>
                   <p className="font-semibold text-xs sm:text-sm">{formError}</p>
                   <p className="text-[11px] text-rose-700/80 dark:text-rose-300/80 mt-0.5">
@@ -320,7 +320,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
                 onClick={() => handleSubmit()}
                 className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white transition-colors shrink-0 shadow-sm min-h-[40px] touch-manipulation"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
+                <ArrowCounterClockwise className="w-3.5 h-3.5" weight="bold" />
                 <span>Retry</span>
               </button>
             </div>
@@ -484,7 +484,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
                         className="p-1 hover:text-rose-500 transition-colors touch-manipulation"
                         aria-label={`Remove ${skill}`}
                       >
-                        <X className="w-3.5 h-3.5" />
+                        <X className="w-3.5 h-3.5" weight="bold" />
                       </button>
                     </motion.span>
                   ))}
@@ -518,7 +518,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
                       onClick={() => addSkill(suggested)}
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-mono border border-dashed border-zinc-300 dark:border-zinc-700 hover:border-cyan-500 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 transition-colors min-h-[32px] touch-manipulation"
                     >
-                      <Plus className="w-2.5 h-2.5" />
+                      <Plus className="w-2.5 h-2.5" weight="bold" />
                       <span>{suggested}</span>
                     </button>
                   );
@@ -556,7 +556,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
                         className="p-1 hover:text-rose-500 transition-colors touch-manipulation"
                         aria-label={`Remove certification ${cert}`}
                       >
-                        <X className="w-3.5 h-3.5" />
+                        <X className="w-3.5 h-3.5" weight="bold" />
                       </button>
                     </motion.span>
                   ))}
@@ -594,7 +594,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
                 ) : (
                   <>
                     <span>Evaluate Eligibility</span>
-                    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" weight="bold" />
                   </>
                 )}
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Cpu, Layers, Award, CheckCircle2, ChevronRight, Activity, Sparkles } from 'lucide-react';
+import { User, Cpu, Stack, Trophy, CheckCircle, CaretRight, Pulse, Sparkle } from '@phosphor-icons/react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { TRANSITION_EASE } from '../utils/motion';
 
@@ -55,7 +55,7 @@ export const HeroVisualizer: React.FC = () => {
       title: 'Skills + Education + Experience',
       tag: 'WEIGHTED',
       tagColor: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400',
-      icon: Layers,
+      icon: Stack,
       subtitle: 'Skills 50% • Education 20% • Experience 20%',
       status: 'SCORING'
     },
@@ -64,7 +64,7 @@ export const HeroVisualizer: React.FC = () => {
       title: 'Eligibility Score',
       tag: 'HIGHLY ELIGIBLE',
       tagColor: 'bg-emerald-100/80 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800',
-      icon: Award,
+      icon: Trophy,
       subtitle: 'Candidate qualifies for direct technical interview round',
       status: 'COMPLETE'
     }
@@ -129,7 +129,7 @@ export const HeroVisualizer: React.FC = () => {
                     ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
                     : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
                 }`}>
-                  <User className="w-3.5 h-3.5" />
+                  <User className="w-3.5 h-3.5" weight="bold" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -147,7 +147,7 @@ export const HeroVisualizer: React.FC = () => {
               </div>
               <div className="hidden sm:flex items-center gap-1.5 font-mono text-[10px] text-zinc-500 dark:text-zinc-400">
                 <span>PARSED</span>
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                <CheckCircle className="w-3.5 h-3.5 text-emerald-500" weight="bold" />
               </div>
             </div>
           </div>
@@ -188,7 +188,7 @@ export const HeroVisualizer: React.FC = () => {
                     ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
                     : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
                 }`}>
-                  <Cpu className="w-3.5 h-3.5" />
+                  <Cpu className="w-3.5 h-3.5" weight="bold" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -211,7 +211,7 @@ export const HeroVisualizer: React.FC = () => {
                     <span>RUNNING</span>
                   </div>
                 ) : (
-                  <Activity className="w-3.5 h-3.5 text-zinc-400" />
+                  <Pulse className="w-3.5 h-3.5 text-zinc-400" weight="bold" />
                 )}
               </div>
             </div>
@@ -225,7 +225,7 @@ export const HeroVisualizer: React.FC = () => {
                 className="mt-2.5 pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[10px] font-mono text-zinc-500 dark:text-zinc-400"
               >
                 <span className="flex items-center gap-1">
-                  <Sparkles className="w-2.5 h-2.5" />
+                  <Sparkle className="w-2.5 h-2.5" weight="bold" />
                   <span>COSINE_SIMILARITY: 0.942</span>
                 </span>
                 <span>TOKEN_VECTORS: 312</span>
@@ -268,7 +268,7 @@ export const HeroVisualizer: React.FC = () => {
                     ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
                     : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
                 }`}>
-                  <Layers className="w-3.5 h-3.5" />
+                  <Stack className="w-3.5 h-3.5" weight="bold" />
                 </div>
                 <span className="text-xs font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
                   Skills + Education + Experience
@@ -325,7 +325,7 @@ export const HeroVisualizer: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="p-1.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-                  <Award className="w-3.5 h-3.5" />
+                  <Trophy className="w-3.5 h-3.5" weight="bold" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
@@ -358,7 +358,7 @@ export const HeroVisualizer: React.FC = () => {
           </div>
           <div className="flex items-center gap-1 text-zinc-700 dark:text-zinc-300">
             <span>AUTOMATED REPORT</span>
-            <ChevronRight className="w-3 h-3" />
+            <CaretRight className="w-3 h-3" weight="bold" />
           </div>
         </div>
       </div>

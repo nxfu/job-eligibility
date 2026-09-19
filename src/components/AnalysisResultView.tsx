@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  CheckCircle2, 
-  AlertTriangle, 
+  CheckCircle, 
+  Warning, 
   ArrowLeft, 
   Copy, 
   Check, 
-  Download, 
+  DownloadSimple, 
   Briefcase, 
-  Sparkles,
-  TrendingUp,
+  Sparkle,
+  TrendUp,
   Clock,
-  Zap,
-  RotateCcw
-} from 'lucide-react';
+  Lightning,
+  ArrowCounterClockwise
+} from '@phosphor-icons/react';
 import { motion, useReducedMotion } from 'motion/react';
 import { EligibilityAnalysisResult } from '../types/eligibility';
 import { JOB_ROLES } from '../data/rolesData';
@@ -159,7 +159,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
           onClick={onEditProfile}
           className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
+          <ArrowLeft className="w-3.5 h-3.5" weight="bold" />
           <span>MODIFY INPUT PROFILE</span>
         </motion.button>
 
@@ -171,7 +171,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white transition-all shadow-none"
             title="Copy formatted text report"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" weight="bold" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" weight="bold" />}
             <span>{copied ? 'Report Copied' : 'Copy Report'}</span>
           </motion.button>
 
@@ -182,7 +182,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white transition-all shadow-none"
             title="Download JSON assessment payload"
           >
-            <Download className="w-3.5 h-3.5 text-zinc-500" />
+            <DownloadSimple className="w-3.5 h-3.5 text-zinc-500" weight="bold" />
             <span>Export JSON</span>
           </motion.button>
 
@@ -193,7 +193,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
             className="p-1.5 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
             title="Start new analysis"
           >
-            <RotateCcw className="w-4 h-4" />
+            <ArrowCounterClockwise className="w-4 h-4" weight="bold" />
           </motion.button>
         </div>
       </motion.div>
@@ -222,7 +222,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
             
             <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-600 dark:text-zinc-400">
               <span className="inline-flex items-center gap-1 font-medium text-zinc-900 dark:text-zinc-200">
-                <Briefcase className="w-3.5 h-3.5 text-zinc-500" />
+                <Briefcase className="w-3.5 h-3.5 text-zinc-500" weight="bold" />
                 Target: {result.targetRole.title}
               </span>
               <span>•</span>
@@ -386,7 +386,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
         <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <CheckCircle className="w-4 h-4 text-emerald-500" weight="bold" />
               <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                 Matched Skills
               </h4>
@@ -410,7 +410,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
                   transition={{ delay: 0.3 + i * 0.04, duration: 0.25 }}
                   className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60"
                 >
-                  <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                  <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" weight="bold" />
                   <span>{skill}</span>
                 </motion.span>
               ))
@@ -444,7 +444,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
         <div className="p-5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3.5 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-500" />
+              <Warning className="w-4 h-4 text-amber-500" weight="bold" />
               <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                 Skill Gaps & Missing Competencies
               </h4>
@@ -502,7 +502,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
       >
         <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-zinc-700 dark:text-zinc-300" />
+            <Sparkle className="w-4 h-4 text-zinc-700 dark:text-zinc-300" weight="bold" />
             <h4 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
               Targeted Action Roadmap
             </h4>
@@ -554,11 +554,11 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
 
                 <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-200/60 dark:border-zinc-800/60">
                   <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
-                    <TrendingUp className="w-3.5 h-3.5" />
+                    <TrendUp className="w-3.5 h-3.5" weight="bold" />
                     <span>Projected: {rec.impact}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-zinc-400" />
+                    <Clock className="w-3.5 h-3.5 text-zinc-400" weight="bold" />
                     <span>Estimated Effort: {rec.estimatedEffort}</span>
                   </div>
                 </div>
@@ -576,7 +576,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
         className="p-3 rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-zinc-500 dark:text-zinc-400"
       >
         <div className="flex items-center gap-2">
-          <Zap className="w-3.5 h-3.5 text-zinc-500" />
+          <Lightning className="w-3.5 h-3.5 text-zinc-500" weight="bold" />
           <span>API: {result.backendContract.apiVersion}</span>
           <span>•</span>
           <span>Engine: {result.backendContract.engine}</span>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserCheck, Cpu, Award } from 'lucide-react';
+import { UserCheck, Cpu, Trophy } from '@phosphor-icons/react';
 import { motion, useReducedMotion } from 'motion/react';
 import { staggerContainerVariants, staggerItemVariants, fadeInUpVariants, viewportConfig } from '../utils/motion';
 
@@ -26,7 +26,7 @@ export const HowItWorks: React.FC = () => {
       title: 'Get Your Result',
       description: 'Receive your eligibility score, matched skills, missing skills and recommendations.',
       subtext: 'Obtain an instantaneous readiness score, actionable skill gap roadmap, and structured technical assessment report.',
-      icon: Award
+      icon: Trophy
     }
   ];
 
@@ -78,7 +78,7 @@ export const HowItWorks: React.FC = () => {
                       {step.stepNumber}
                     </span>
                     <div className="p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 group-hover:border-zinc-400 dark:group-hover:border-zinc-700 transition-colors">
-                      <Icon className="w-4 h-4 stroke-[2]" />
+                      <Icon className="w-4 h-4" weight="bold" />
                     </div>
                   </div>
 

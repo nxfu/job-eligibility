@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Sparkles, BookOpen } from 'lucide-react';
+import { ArrowRight, Sparkle, BookOpen } from '@phosphor-icons/react';
 import { motion, useReducedMotion } from 'motion/react';
 import { HeroVisualizer } from './HeroVisualizer';
 import { TRANSITION_EASE } from '../utils/motion';
@@ -71,7 +71,7 @@ export const Hero: React.FC<HeroProps> = ({
               animate="visible"
               className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50/90 dark:bg-zinc-900/90 text-[11px] font-mono uppercase tracking-widest text-zinc-700 dark:text-zinc-300 shadow-[0_1px_4px_rgba(0,0,0,0.02)]"
             >
-              <Sparkles className="w-3 h-3 text-zinc-600 dark:text-zinc-400" />
+              <Sparkle className="w-3 h-3 text-zinc-600 dark:text-zinc-400" weight="bold" />
               <span>AI-POWERED CAREER ANALYSIS</span>
             </motion.div>
 
@@ -115,7 +115,7 @@ export const Hero: React.FC<HeroProps> = ({
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded text-sm font-medium bg-zinc-950 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-colors border border-zinc-900 dark:border-zinc-200 shadow-sm"
               >
                 <span>Check Eligibility</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4" weight="bold" />
               </motion.button>
 
               <motion.button
@@ -125,7 +125,7 @@ export const Hero: React.FC<HeroProps> = ({
                 onClick={onSeeHowItWorksClick}
                 className="inline-flex items-center gap-2 px-4.5 py-2.5 rounded text-sm font-medium text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors border border-zinc-200 dark:border-zinc-800"
               >
-                <BookOpen className="w-4 h-4 text-zinc-500" />
+                <BookOpen className="w-4 h-4 text-zinc-500" weight="bold" />
                 <span>See How It Works</span>
               </motion.button>
             </motion.div>

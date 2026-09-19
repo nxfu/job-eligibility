@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sun, Moon, ArrowRight, Menu, X } from 'lucide-react';
+import { Sun, Moon, ArrowRight, List, X } from '@phosphor-icons/react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 import { useTheme } from '../context/ThemeContext';
@@ -130,7 +130,7 @@ export const Navbar: React.FC = () => {
               aria-label="Toggle theme"
               className="w-8 h-8 flex items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
             >
-              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {theme === 'dark' ? <Sun className="w-4 h-4" weight="bold" /> : <Moon className="w-4 h-4" weight="bold" />}
             </motion.button>
 
             {/* Get Started Button */}
@@ -142,7 +142,7 @@ export const Navbar: React.FC = () => {
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-900 transition-colors border border-zinc-800 dark:border-zinc-200 shadow-sm"
             >
               <span>Get Started</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5" weight="bold" />
             </motion.button>
           </div>
 
@@ -154,7 +154,7 @@ export const Navbar: React.FC = () => {
               aria-label="Toggle theme"
               className="w-8 h-8 flex items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300"
             >
-              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {theme === 'dark' ? <Sun className="w-4 h-4" weight="bold" /> : <Moon className="w-4 h-4" weight="bold" />}
             </button>
             <button
               id="mobile-menu-toggle-btn"
@@ -162,7 +162,7 @@ export const Navbar: React.FC = () => {
               className="p-2 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" weight="bold" /> : <List className="w-5 h-5" weight="bold" />}
             </button>
           </div>
         </div>
@@ -195,7 +195,7 @@ export const Navbar: React.FC = () => {
                 className="w-full flex items-center justify-center gap-2 py-2.5 rounded text-xs font-medium bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900"
               >
                 <span>Get Started</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5" weight="bold" />
               </button>
             </div>
           </motion.div>

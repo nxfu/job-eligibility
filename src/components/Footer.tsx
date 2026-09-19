@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, ArrowUp } from 'lucide-react';
+import { GithubLogo, ArrowUp } from '@phosphor-icons/react';
 
 
 export const Footer: React.FC = () => {
@@ -94,7 +94,7 @@ export const Footer: React.FC = () => {
                 className="p-2 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
                 aria-label="GitHub"
               >
-                <Github className="w-4 h-4" />
+                <GithubLogo className="w-4 h-4" weight="bold" />
               </a>
             </div>
             <p className="text-[11px] text-zinc-400 font-mono">
@@ -115,7 +115,7 @@ export const Footer: React.FC = () => {
             className="inline-flex items-center gap-1.5 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
             <span>BACK TO TOP</span>
-            <ArrowUp className="w-3.5 h-3.5" />
+            <ArrowUp className="w-3.5 h-3.5" weight="bold" />
           </button>
         </div>
       </div>

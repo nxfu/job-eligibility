@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cpu, Target, Gauge, Lightbulb } from 'lucide-react';
+import { Cpu, Crosshair, Gauge, Lightbulb } from '@phosphor-icons/react';
 import { motion, useReducedMotion } from 'motion/react';
 import { staggerContainerVariants, staggerItemVariants, viewportConfig } from '../utils/motion';
 
@@ -15,7 +15,7 @@ export const ValueStrip: React.FC = () => {
     },
     {
       id: 'value-item-gap',
-      icon: Target,
+      icon: Crosshair,
       title: 'Skill Gap Detection',
       caption: 'Pinpoint missing core proficiencies'
     },
@@ -53,7 +53,7 @@ export const ValueStrip: React.FC = () => {
                 className="group py-6 sm:px-6 first:pl-0 last:pr-0 flex items-start gap-3.5 transition-colors duration-200 hover:bg-zinc-100/40 dark:hover:bg-zinc-900/40"
               >
                 <div className="p-2 rounded border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 group-hover:border-zinc-400 dark:group-hover:border-zinc-600 transition-colors">
-                  <Icon className="w-4 h-4 stroke-[1.8]" />
+                  <Icon className="w-4 h-4" weight="bold" />
                 </div>
                 <div className="space-y-0.5">
                   <h3 className="text-xs font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">

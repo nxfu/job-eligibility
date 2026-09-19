@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Terminal, BarChart2, Cpu, Database, Globe, Code2 } from 'lucide-react';
+import { ArrowRight, Terminal, ChartBar, Cpu, Database, Globe, Code } from '@phosphor-icons/react';
 import { motion, useReducedMotion } from 'motion/react';
 import { JOB_ROLES } from '../data/rolesData';
 import { JobRoleKey } from '../types/eligibility';
@@ -18,7 +18,7 @@ export const JobRolesSection: React.FC<JobRolesSectionProps> = ({ onSelectRole }
       case 'python-developer':
         return Terminal;
       case 'data-analyst':
-        return BarChart2;
+        return ChartBar;
       case 'machine-learning-engineer':
         return Cpu;
       case 'data-scientist':
@@ -26,7 +26,7 @@ export const JobRolesSection: React.FC<JobRolesSectionProps> = ({ onSelectRole }
       case 'web-developer':
         return Globe;
       case 'software-developer':
-        return Code2;
+        return Code;
     }
   };
 
@@ -92,7 +92,7 @@ export const JobRolesSection: React.FC<JobRolesSectionProps> = ({ onSelectRole }
                   {/* Top Role Header */}
                   <div className="flex items-start justify-between">
                     <div className="p-2.5 rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 group-hover:bg-zinc-900 group-hover:text-white dark:group-hover:bg-zinc-100 dark:group-hover:text-zinc-900 transition-colors duration-200">
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-5 h-5" weight="bold" />
                     </div>
                     <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800">
                       {role.marketDemand} Demand
@@ -142,7 +142,7 @@ export const JobRolesSection: React.FC<JobRolesSectionProps> = ({ onSelectRole }
                     className="w-full flex items-center justify-between text-xs font-semibold text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
                   >
                     <span>Check Eligibility</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" />
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" weight="bold" />
                   </button>
                 </div>
               </motion.div>
