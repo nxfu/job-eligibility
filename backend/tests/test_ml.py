@@ -5,7 +5,7 @@ from backend.ml.preprocessing import extract_features_from_profile, FEATURE_COLU
 
 def test_feature_extraction():
     sample_profile = {
-        "fullName": "Alex Rivera",
+        "fullName": "Gaurav Gupta",
         "educationLevel": "Bachelor's Degree (B.Tech / B.E.)",
         "branch": "Computer Science & Engineering (CSE)",
         "cgpa": "8.7",

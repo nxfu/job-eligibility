@@ -50,7 +50,7 @@ def test_evaluate_eligibility_strong_candidate():
 def test_evaluate_eligibility_average_candidate():
     """Profile 2: Average candidate with a relevant degree and partial skills."""
     payload = {
-        "fullName": "Priya Sharma",
+        "fullName": "Reeya Yadav",
         "educationLevel": "Bachelor's Degree (B.Tech / B.E. / B.S. / B.Sc / B.C.A.)",
         "branch": "Information Technology (IT)",
         "cgpa": "7.8",
@@ -130,7 +130,7 @@ def test_all_six_roles_supported(role_key, role_title, sample_skills):
 
 def test_invalid_target_role():
     payload = {
-        "fullName": "Alex Rivera",
+        "fullName": "Gaurav Gupta",
         "educationLevel": "Bachelor's Degree",
         "branch": "CSE",
         "cgpa": "8.5",
@@ -147,7 +147,7 @@ def test_invalid_target_role():
 
 def test_empty_technical_skills():
     payload = {
-        "fullName": "Alex Rivera",
+        "fullName": "Gaurav Gupta",
         "educationLevel": "Bachelor's Degree",
         "branch": "CSE",
         "cgpa": "8.5",
@@ -161,7 +161,7 @@ def test_empty_technical_skills():
 
 def test_invalid_cgpa():
     payload = {
-        "fullName": "Alex Rivera",
+        "fullName": "Gaurav Gupta",
         "educationLevel": "Bachelor's Degree",
         "branch": "CSE",
         "cgpa": "abc_not_a_number",
@@ -175,7 +175,7 @@ def test_invalid_cgpa():
 
 def test_negative_experience():
     payload = {
-        "fullName": "Alex Rivera",
+        "fullName": "Gaurav Gupta",
         "educationLevel": "Bachelor's Degree",
         "branch": "CSE",
         "cgpa": "8.5",

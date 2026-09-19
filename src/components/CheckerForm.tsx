@@ -35,7 +35,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Form state
-  const [fullName, setFullName] = useState('Alex Rivera');
+  const [fullName, setFullName] = useState('Gaurav Gupta');
   const [educationLevel, setEducationLevel] = useState(EDUCATION_LEVELS[0]);
   const [branch, setBranch] = useState(BRANCH_OPTIONS[0]);
   const [cgpa, setCgpa] = useState('8.6');
@@ -369,7 +369,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="e.g. Alex Rivera"
+                  placeholder="e.g. Gaurav Gupta"
                   required
                   className="w-full px-3 py-2.5 rounded text-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-cyan-500/70 focus:ring-1 focus:ring-cyan-500/20 transition-all duration-200 shadow-none min-h-[44px]"
                 />

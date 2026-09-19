@@ -149,8 +149,8 @@ export const EXPERIENCE_LEVELS = [
 
 export const SAMPLE_PROFILES = [
   {
-    name: 'Alex Rivera (ML Aspirant)',
-    fullName: 'Alex Rivera',
+    name: 'Gaurav Gupta (ML Aspirant)',
+    fullName: 'Gaurav Gupta',
     educationLevel: "Bachelor's Degree (B.Tech / B.E. / B.S. / B.Sc / B.C.A.)",
     branch: 'Computer Science & Engineering (CSE)',
     cgpa: '8.7',
@@ -160,8 +160,8 @@ export const SAMPLE_PROFILES = [
     targetRole: 'machine-learning-engineer' as JobRoleKey
   },
   {
-    name: 'Priya Sharma (Data Analyst)',
-    fullName: 'Priya Sharma',
+    name: 'Reeya Yadav (Data Analyst)',
+    fullName: 'Reeya Yadav',
     educationLevel: "Bachelor's Degree (B.Tech / B.E. / B.S. / B.Sc / B.C.A.)",
     branch: 'Information Technology (IT)',
     cgpa: '8.1',
@@ -171,8 +171,8 @@ export const SAMPLE_PROFILES = [
     targetRole: 'data-analyst' as JobRoleKey
   },
   {
-    name: 'David Chen (Full Stack Web)',
-    fullName: 'David Chen',
+    name: 'Shamim Mansoori (Full Stack Web)',
+    fullName: 'Shamim Mansoori',
     educationLevel: "Bachelor's Degree (B.Tech / B.E. / B.S. / B.Sc / B.C.A.)",
     branch: 'Computer Science & Engineering (CSE)',
     cgpa: '8.4',

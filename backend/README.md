@@ -164,7 +164,7 @@ The backend supports the exact 6 industry engineering roles defined in the React
 #### Example Request Payload:
 ```json
 {
-  "fullName": "Alex Rivera",
+  "fullName": "Gaurav Gupta",
   "educationLevel": "Bachelor's Degree (B.Tech / B.E. / B.S. / B.Sc / B.C.A.)",
   "branch": "Computer Science & Engineering (CSE)",
   "cgpa": "8.6",
@@ -191,7 +191,7 @@ The backend supports the exact 6 industry engineering roles defined in the React
   "evaluationId": "eval-6aa7c656-bcc31d",
   "timestamp": "2026-09-14T10:03:02.606346+00:00",
   "candidate": {
-    "fullName": "Alex Rivera",
+    "fullName": "Gaurav Gupta",
     "educationLevel": "Bachelor's Degree (B.Tech / B.E. / B.S. / B.Sc / B.C.A.)",
     "branch": "Computer Science & Engineering (CSE)",
     "cgpa": "8.6",
@@ -260,7 +260,7 @@ The backend supports the exact 6 industry engineering roles defined in the React
       "estimatedEffort": "Ongoing"
     }
   ],
-  "verdictSummary": "Alex Rivera satisfies the primary qualifications for Machine Learning Engineer. Addressing 3 key skill gaps will elevate profile visibility into top screening percentiles.",
+  "verdictSummary": "Gaurav Gupta satisfies the primary qualifications for Machine Learning Engineer. Addressing 3 key skill gaps will elevate profile visibility into top screening percentiles.",
   "backendContract": {
     "apiVersion": "v1.4.2-py",
     "engine": "ML-LogisticRegression-v1",
