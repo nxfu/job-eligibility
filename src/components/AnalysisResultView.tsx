@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   CheckCircle, 
   Warning, 
@@ -61,7 +61,16 @@ export const AnalysisResultView: React.FC<AnalysisResultViewProps> = ({
 }) => {
   const shouldReduceMotion = useReducedMotion();
   const [copied, setCopied] = useState(false);
+  const copyResetTimerRef = useRef<number | null>(null);
   const animatedScore = useAnimatedCount(result.scores.overallScore, 1100, !shouldReduceMotion);
+
+  useEffect(() => {
+    return () => {
+      if (copyResetTimerRef.current !== null) {
+        window.clearTimeout(copyResetTimerRef.current);
+      }
+    };
+  }, []);
 
   const getTierColor = (tier: string) => {
     switch (tier) {
@@ -98,7 +107,31 @@ export const AnalysisResultView: React.FC<AnalysisResultViewProps> = ({
 
   const tierColors = getTierColor(result.scores.tier);
 
-  const handleCopyReport = () => {
+  /**
+   * Copies text without relying on the async Clipboard API, which is unavailable
+   * in non-secure contexts and in some in-app browsers.
+   */
+  const copyViaFallback = (text: string): boolean => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-9999px';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    let succeeded = false;
+    try {
+      succeeded = document.execCommand('copy');
+    } catch {
+      succeeded = false;
+    }
+    document.body.removeChild(textarea);
+    return succeeded;
+  };
+
+  const handleCopyReport = async () => {
     const reportText = `JOB ELIGIBILITY ASSESSMENT REPORT
 ==================================
 Candidate: ${result.candidate.fullName}
@@ -128,19 +161,46 @@ ${result.recommendations.map(r => `[${r.priority}] ${r.title} - ${r.description}
 
 Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion})`;
 
-    navigator.clipboard.writeText(reportText);
+    let succeeded = false;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(reportText);
+        succeeded = true;
+      } else {
+        succeeded = copyViaFallback(reportText);
+      }
+    } catch {
+      // Permission denied or insecure context — try the legacy path before giving up
+      succeeded = copyViaFallback(reportText);
+    }
+
+    // Only surface the confirmation state when the copy actually happened
+    if (!succeeded) return;
+
     setCopied(true);
-    setTimeout(() => setCopied(false), 2200);
+    if (copyResetTimerRef.current !== null) {
+      window.clearTimeout(copyResetTimerRef.current);
+    }
+    copyResetTimerRef.current = window.setTimeout(() => setCopied(false), 2200);
   };
 
   const handleDownloadJSON = () => {
     const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
+    const candidateSlug =
+      result.candidate.fullName.trim().replace(/\s+/g, '-').toLowerCase() || 'candidate';
+
     const a = document.createElement('a');
     a.href = url;
-    a.download = `eligibility-assessment-${result.candidate.fullName.replace(/\s+/g, '-').toLowerCase()}-${result.targetRole.key}.json`;
+    a.download = `eligibility-assessment-${candidateSlug}-${result.targetRole.key}.json`;
+    a.style.display = 'none';
+
+    // Firefox only honours the click when the anchor is attached to the document,
+    // and the object URL has to outlive the click for the download to start.
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
   };
 
   return (
