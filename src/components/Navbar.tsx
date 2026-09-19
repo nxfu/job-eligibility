@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon, ArrowRight, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import { BrandLogo } from './BrandLogo';
+
 import { useTheme } from '../context/ThemeContext';
 import { TRANSITION_EASE } from '../utils/motion';
 
@@ -70,8 +70,8 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => scrollToSection('hero')}
           >
-            <div className="h-8 w-8 rounded bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-white dark:text-zinc-900 border border-zinc-800 dark:border-zinc-200 shadow-sm transition-transform duration-200 group-hover:scale-105">
-              <BrandLogo className="w-4 h-4" />
+            <div className="h-8 w-8 rounded flex items-center justify-center shadow-sm transition-transform duration-200 group-hover:scale-105 overflow-hidden">
+              <img src="/favicon.png" alt="Logo" className="w-8 h-8 object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight text-zinc-950 dark:text-zinc-50 font-sans">
