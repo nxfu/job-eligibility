@@ -54,11 +54,11 @@ export default function App() {
             onRoleSelectionHandled={() => setSelectedRoleFromExternal(null)}
           />
 
-          {/* 5. How It Works (3 Steps) */}
-          <HowItWorks />
-
-          {/* 6. Explore Job Roles Catalog */}
+          {/* 5. Explore Job Roles Catalog */}
           <JobRolesSection onSelectRole={handleRoleSelection} />
+
+          {/* 6. How It Works (3 Steps) */}
+          <HowItWorks />
 
           {/* 7. Final High-Impact CTA */}
           <FinalCTA onCheckClick={() => scrollToSection('checker')} />

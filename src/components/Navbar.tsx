@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sun, Moon, ArrowRight, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
@@ -11,10 +11,14 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const shouldReduceMotion = useReducedMotion();
+  const isNavigatingRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+
+      // Skip scroll spy while a programmatic scroll is in progress
+      if (isNavigatingRef.current) return;
 
       // Simple active section detection
       const sections = ['hero', 'checker', 'roles', 'how-it-works'];
@@ -36,6 +40,11 @@ export const Navbar: React.FC = () => {
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
     setActiveSection(id);
+
+    // Lock scroll spy so intermediate sections don't hijack the active pill
+    isNavigatingRef.current = true;
+    setTimeout(() => { isNavigatingRef.current = false; }, 800);
+
     const element = document.getElementById(id);
     if (element) {
       const yOffset = -72;
@@ -84,7 +93,7 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav role="navigation" aria-label="Main navigation" className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (
@@ -119,7 +128,7 @@ export const Navbar: React.FC = () => {
               id="theme-toggle-btn"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </motion.button>
@@ -143,7 +152,7 @@ export const Navbar: React.FC = () => {
               id="mobile-theme-toggle"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300"
+              className="w-8 h-8 flex items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
@@ -151,7 +160,7 @@ export const Navbar: React.FC = () => {
               id="mobile-menu-toggle-btn"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300"
-              aria-label="Open menu"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -173,6 +182,7 @@ export const Navbar: React.FC = () => {
             {navLinks.map((link) => (
               <button
                 key={link.id}
+                role="menuitem"
                 onClick={() => scrollToSection(link.id)}
                 className="block w-full text-left py-2 px-2 rounded text-sm text-zinc-700 dark:text-zinc-300 font-medium hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
               >

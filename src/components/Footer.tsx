@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Linkedin, ArrowUp } from 'lucide-react';
+import { Github, ArrowUp } from 'lucide-react';
 
 
 export const Footer: React.FC = () => {
@@ -17,9 +17,9 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer id="main-footer" className="border-t border-zinc-200 dark:border-zinc-850 bg-white dark:bg-black py-12 md:py-16">
+    <footer id="main-footer" className="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-zinc-200 dark:border-zinc-850">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-zinc-200 dark:border-zinc-800">
           
           {/* Brand Col */}
           <div className="md:col-span-6 space-y-3">
@@ -48,7 +48,7 @@ export const Footer: React.FC = () => {
               <li>
                 <button
                   onClick={() => scrollToSection('hero')}
-                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors focus-visible:text-zinc-950 dark:focus-visible:text-zinc-100"
                 >
                   Home
                 </button>
@@ -56,7 +56,7 @@ export const Footer: React.FC = () => {
               <li>
                 <button
                   onClick={() => scrollToSection('checker')}
-                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors focus-visible:text-zinc-950 dark:focus-visible:text-zinc-100"
                 >
                   Check Eligibility
                 </button>
@@ -64,7 +64,7 @@ export const Footer: React.FC = () => {
               <li>
                 <button
                   onClick={() => scrollToSection('roles')}
-                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors focus-visible:text-zinc-950 dark:focus-visible:text-zinc-100"
                 >
                   Job Roles
                 </button>
@@ -72,7 +72,7 @@ export const Footer: React.FC = () => {
               <li>
                 <button
                   onClick={() => scrollToSection('how-it-works')}
-                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+                  className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors focus-visible:text-zinc-950 dark:focus-visible:text-zinc-100"
                 >
                   How It Works
                 </button>
@@ -87,7 +87,7 @@ export const Footer: React.FC = () => {
             </div>
             <div className="flex items-center gap-3">
               <a
-                href="https://github.com"
+                href="https://github.com/nxfu/job-eligibility"
                 target="_blank"
                 rel="noreferrer"
                 id="footer-github-link"
@@ -95,16 +95,6 @@ export const Footer: React.FC = () => {
                 aria-label="GitHub"
               >
                 <Github className="w-4 h-4" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                id="footer-linkedin-link"
-                className="p-2 rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-4 h-4" />
               </a>
             </div>
             <p className="text-[11px] text-zinc-400 font-mono">
@@ -121,6 +111,7 @@ export const Footer: React.FC = () => {
           </div>
           <button
             onClick={scrollToTop}
+            aria-label="Back to top"
             className="inline-flex items-center gap-1.5 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
             <span>BACK TO TOP</span>

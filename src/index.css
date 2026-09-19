@@ -1,9 +1,23 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode for Tailwind v4 (required for JS toggle) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  /* Smooth theme transitions on key elements only — avoids interfering with framer-motion */
+  body,
+  header,
+  footer,
+  main,
+  section,
+  nav,
+  .theme-transition {
+    transition: background-color 200ms ease-out, border-color 200ms ease-out, color 200ms ease-out;
   }
 
   body {
@@ -12,6 +26,24 @@
 
   code, pre, .font-mono {
     font-family: var(--font-mono);
+  }
+
+  /* Keyboard focus ring utility */
+  :focus-visible {
+    outline: 2px solid rgb(59 130 246 / 0.5);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Select element dark mode fix */
+  .dark select option {
+    background-color: #18181b;
+    color: #f4f4f5;
+  }
+
+  select option {
+    background-color: #ffffff;
+    color: #18181b;
   }
 }
 

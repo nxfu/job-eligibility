@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Eligibility Checker — AI-Powered Career Analysis</title>
+    <title>Job Eligibility - Group 18</title>
     <meta name="description" content="Production-grade career analysis and job eligibility assessment platform. Analyze your skills, education, and experience against role requirements." />
-    <meta property="og:title" content="Job Eligibility Checker — AI-Powered Career Analysis" />
+    <meta property="og:title" content="Job Eligibility - Group 18" />
     <meta property="og:description" content="Production-grade career analysis and job eligibility assessment platform. Analyze your skills, education, and experience against role requirements." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -15,6 +15,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   </head>
   <body class="bg-white text-zinc-900 dark:bg-black dark:text-zinc-100 antialiased selection:bg-zinc-800 selection:text-white dark:selection:bg-zinc-200 dark:selection:text-black">
+    <script>
+      // Synchronize theme class before first paint to prevent FOUC
+      (function() {
+        var saved = localStorage.getItem('jec_theme');
+        var prefersDark = !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDark = saved ? saved === 'dark' : prefersDark;
+        document.documentElement.classList.toggle('dark', isDark);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

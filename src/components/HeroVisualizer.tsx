@@ -84,7 +84,7 @@ export const HeroVisualizer: React.FC = () => {
       <div className="relative rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/90 dark:bg-zinc-950/90 p-5 shadow-[0_4px_24px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_28px_rgba(0,0,0,0.5)] backdrop-blur-sm transition-all duration-300">
         
         {/* Terminal Header Bar */}
-        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-zinc-200 dark:border-zinc-850">
+        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></span>
             <span className="w-2.5 h-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700"></span>
@@ -351,7 +351,7 @@ export const HeroVisualizer: React.FC = () => {
         </div>
 
         {/* Telemetry Footer */}
-        <div className="mt-4 pt-3 border-t border-zinc-200 dark:border-zinc-850 flex items-center justify-between text-[10px] font-mono text-zinc-500 dark:text-zinc-400">
+        <div className="mt-4 pt-3 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-[10px] font-mono text-zinc-500 dark:text-zinc-400">
           <div className="flex items-center gap-3">
             <span>LATENCY: 42ms</span>
             <span>PRECISION: 0.994</span>

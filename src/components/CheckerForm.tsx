@@ -281,7 +281,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
           className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm p-4 sm:p-6 md:p-8"
         >
           {/* Quick Demo Pre-fill helper */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-zinc-200 dark:border-zinc-850">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-zinc-200 dark:border-zinc-800">
             <div className="flex items-center gap-1.5 text-xs font-mono text-zinc-500 dark:text-zinc-400">
               <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
               <span>QUICK TEST PRESETS:</span>
@@ -581,7 +581,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
                 type="submit"
                 disabled={isAnalyzing}
                 aria-busy={isAnalyzing}
-                className="btn-shimmer w-full relative overflow-hidden flex items-center justify-center gap-2.5 py-3.5 px-6 rounded text-sm font-semibold tracking-wide bg-zinc-950 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-all duration-200 border border-zinc-950 dark:border-zinc-200 shadow-sm disabled:opacity-90 disabled:cursor-wait min-h-[48px] touch-manipulation"
+                className="group w-full relative overflow-hidden flex items-center justify-center gap-2.5 py-3.5 px-6 rounded text-sm font-semibold tracking-wide bg-zinc-950 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-all duration-200 border border-zinc-950 dark:border-zinc-200 shadow-sm disabled:opacity-90 disabled:cursor-wait min-h-[48px] touch-manipulation"
               >
                 {isAnalyzing ? (
                   <div className="flex items-center gap-2.5 text-xs font-mono py-0.5 px-1 max-w-full">

@@ -500,7 +500,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
         transition={{ duration: 0.45, delay: 0.35, ease: TRANSITION_EASE }}
         className="p-6 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-5 shadow-sm"
       >
-        <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-850">
+        <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-zinc-700 dark:text-zinc-300" />
             <h4 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
@@ -573,7 +573,7 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
         initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.5 }}
-        className="p-3 rounded border border-zinc-200 dark:border-zinc-850 bg-zinc-50 dark:bg-zinc-900/40 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-zinc-500 dark:text-zinc-400"
+        className="p-3 rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-zinc-500 dark:text-zinc-400"
       >
         <div className="flex items-center gap-2">
           <Zap className="w-3.5 h-3.5 text-zinc-500" />

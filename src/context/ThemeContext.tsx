@@ -15,6 +15,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('jec_theme') as Theme;
       if (saved === 'dark' || saved === 'light') return saved;
+      // Respect system preference when no explicit user choice exists
+      if (window.matchMedia?.('(prefers-color-scheme: light)').matches) return 'light';
       // Default to dark as per modern developer platform aesthetics
       return 'dark';
     }

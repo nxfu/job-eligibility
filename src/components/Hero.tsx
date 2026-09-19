@@ -123,7 +123,7 @@ export const Hero: React.FC<HeroProps> = ({
                 whileTap={{ scale: 0.98 }}
                 id="hero-cta-see-how-it-works"
                 onClick={onSeeHowItWorksClick}
-                className="inline-flex items-center gap-2 px-4.5 py-2.5 rounded text-sm font-medium text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-850 transition-colors border border-zinc-200 dark:border-zinc-800"
+                className="inline-flex items-center gap-2 px-4.5 py-2.5 rounded text-sm font-medium text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors border border-zinc-200 dark:border-zinc-800"
               >
                 <BookOpen className="w-4 h-4 text-zinc-500" />
                 <span>See How It Works</span>
@@ -135,7 +135,7 @@ export const Hero: React.FC<HeroProps> = ({
               variants={itemVariant(0.48)}
               initial="hidden"
               animate="visible"
-              className="pt-4 flex items-center gap-6 border-t border-zinc-200/80 dark:border-zinc-850/80 w-full text-xs font-mono text-zinc-500 dark:text-zinc-400"
+              className="pt-4 flex items-center gap-6 border-t border-zinc-200/80 dark:border-zinc-800/80 w-full text-xs font-mono text-zinc-500 dark:text-zinc-400"
             >
               <div>
                 <span className="font-semibold text-zinc-900 dark:text-zinc-200">6 Core</span> Roles
