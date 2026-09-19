@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from pathlib import Path
 import logging
@@ -84,14 +85,37 @@ if cors_env.strip():
         if orig not in allowed_origins:
             allowed_origins.append(orig)
 
+CORS_ORIGIN_REGEX = r"https://(job(-eligibility-checker)?.*\.vercel\.app|.*\.gaury\.dev)"
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
-    allow_origin_regex=r"https://(job(-eligibility-checker)?.*\.vercel\.app|.*\.gaury\.dev)",
+    allow_origin_regex=CORS_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+def _cors_headers_for(request: Request) -> Dict[str, str]:
+    """
+    Builds the CORS headers for a response that bypasses CORSMiddleware.
+
+    Starlette handles `Exception` via ServerErrorMiddleware, which wraps *outside*
+    the middleware stack, so 500 responses never pass back through CORSMiddleware.
+    Without these headers the browser reports an opaque CORS failure and the
+    frontend shows "network error" instead of the JSON message below.
+    """
+    origin = request.headers.get("origin")
+    if not origin:
+        return {}
+    if origin not in allowed_origins and not re.fullmatch(CORS_ORIGIN_REGEX, origin):
+        return {}
+    return {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Credentials": "true",
+        "Vary": "Origin",
+    }
 
 
 @app.exception_handler(RequestValidationError)
@@ -124,7 +148,8 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={
             "error": "Internal Server Error",
             "message": "An unexpected error occurred during profile evaluation. Please try again."
-        }
+        },
+        headers=_cors_headers_for(request)
     )
 
 
