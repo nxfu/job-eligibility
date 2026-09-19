@@ -84,15 +84,18 @@ export const HeroVisualizer: React.FC = () => {
       <div className="relative rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/90 dark:bg-zinc-950/90 p-5 shadow-[0_4px_24px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_28px_rgba(0,0,0,0.5)] backdrop-blur-sm transition-all duration-300 overflow-hidden">
         
         {/* One-time shine sweep on page load */}
-        <motion.div
-          initial={{ x: '-100%', opacity: 0.7 }}
-          animate={{ x: '200%', opacity: 0 }}
-          transition={{ duration: 1.2, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="absolute inset-0 z-50 pointer-events-none"
-          style={{
-            background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.15) 55%, transparent 60%)',
-          }}
-        />
+        {!shouldReduceMotion && (
+          <motion.div
+            aria-hidden="true"
+            initial={{ x: '-100%', opacity: 0.7 }}
+            animate={{ x: '200%', opacity: 0 }}
+            transition={{ duration: 1.2, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="absolute inset-0 z-50 pointer-events-none"
+            style={{
+              background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.15) 55%, transparent 60%)',
+            }}
+          />
+        )}
         
         {/* Terminal Header Bar */}
         <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-zinc-200 dark:border-zinc-800">

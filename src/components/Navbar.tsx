@@ -177,12 +177,13 @@ export const Navbar: React.FC = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: TRANSITION_EASE }}
+            role="navigation"
+            aria-label="Mobile navigation"
             className="overflow-hidden md:hidden border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-black/95 backdrop-blur-md px-4 pt-3 pb-5 space-y-2"
           >
             {navLinks.map((link) => (
               <button
                 key={link.id}
-                role="menuitem"
                 onClick={() => scrollToSection(link.id)}
                 className="block w-full text-left py-2 px-2 rounded text-sm text-zinc-700 dark:text-zinc-300 font-medium hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
               >
