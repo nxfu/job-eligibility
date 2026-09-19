@@ -126,7 +126,7 @@ export const Navbar: React.FC = () => {
             <motion.button
               whileTap={{ scale: 0.95 }}
               id="theme-toggle-btn"
-              onClick={toggleTheme}
+              onClick={(e) => toggleTheme(e)}
               aria-label="Toggle theme"
               className="w-8 h-8 flex items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
             >
@@ -150,7 +150,7 @@ export const Navbar: React.FC = () => {
           <div className="flex md:hidden items-center gap-2">
             <button
               id="mobile-theme-toggle"
-              onClick={toggleTheme}
+              onClick={(e) => toggleTheme(e)}
               aria-label="Toggle theme"
               className="w-8 h-8 flex items-center justify-center rounded border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300"
             >

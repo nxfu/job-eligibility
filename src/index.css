@@ -77,3 +77,49 @@
   background: rgba(150, 150, 150, 0.4);
 }
 
+/* ── View Transition API: Telegram-style circular reveal ── */
+
+/*
+ * Disable the browser's default cross-fade so our JS-driven clip-path
+ * animation is the only thing running. Without this, the default fade
+ * fights the circular reveal and causes visible flickering.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/*
+ * Layer the snapshots correctly:
+ *  - Going dark → new (dark) snapshot on top, gets clip-path expanded
+ *  - Going light → old (dark) snapshot on top, gets clip-path contracted
+ *
+ * The new snapshot sits above the old by default, which is what we want
+ * for the "expand dark" direction. For "contract to light", our JS
+ * animates the OLD pseudo-element's clip-path from full→zero, so we
+ * need the old on top.
+ */
+.light-transition::view-transition-old(root) {
+  z-index: 999;
+}
+
+.light-transition::view-transition-new(root) {
+  z-index: 1;
+}
+
+/*
+ * Suppress CSS color/background transitions on themed elements while a
+ * view transition is active — they would cause colors to animate
+ * independently of the circular reveal, producing a smeared look.
+ */
+html:active-view-transition body,
+html:active-view-transition header,
+html:active-view-transition footer,
+html:active-view-transition main,
+html:active-view-transition section,
+html:active-view-transition nav,
+html:active-view-transition .theme-transition {
+  transition: none !important;
+}
+
