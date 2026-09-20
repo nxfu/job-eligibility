@@ -1,0 +1,29 @@
+{
+  "name": "Job Eligibility Checker",
+  "short_name": "Job Check",
+  "description": "AI-powered career assessment platform. Evaluate your skills against real job role requirements.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-dark.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-light.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
