@@ -103,6 +103,38 @@ cd backend
 pytest
 ```
 
+### Google OAuth Setup
+
+The app supports **Google Sign-In** via Supabase Auth. No frontend environment variables are required — all OAuth configuration is done in the Supabase and Google Cloud dashboards.
+
+**1. Google Cloud Console**
+
+1. Go to [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials)
+2. Create an **OAuth 2.0 Client ID** (Web application)
+3. Add **Authorized JavaScript origins**:
+   - `https://job.gaury.dev`
+   - `http://localhost:3000`
+4. Add **Authorized redirect URIs**:
+   - `https://zgtrtrxearlhoqmyyhrp.supabase.co/auth/v1/callback`
+5. Copy the **Client ID** and **Client Secret**
+
+**2. Supabase Dashboard**
+
+1. Go to **Authentication → Providers → Google**
+2. Enable the Google provider
+3. Paste the **Client ID** and **Client Secret** from Google Cloud Console
+4. Under **Authentication → URL Configuration**, add these to **Redirect URLs**:
+   - `https://job.gaury.dev`
+   - `http://localhost:3000`
+
+**3. How it works**
+
+- The frontend calls `supabase.auth.signInWithOAuth({ provider: 'google' })` with `redirectTo` set to `window.location.origin`
+- Supabase redirects the user to Google's consent screen, then back to your app
+- The existing `onAuthStateChange` listener picks up the new session automatically
+- The database trigger `handle_new_user()` auto-creates a profile row for new Google users
+- Existing RLS policies work identically — `auth.uid()` is the same for OAuth and email users
+
 ---
 
 ## API
@@ -147,9 +179,12 @@ The key env vars you need:
 
 | Where | Variable | Value |
 |-------|----------|-------|
+| Vercel | `VITE_SUPABASE_URL` | Your Supabase project URL |
+| Vercel | `VITE_SUPABASE_PUBLISHABLE_KEY` | Your Supabase anon/public key |
 | Vercel | `VITE_PYTHON_API_URL` | Your Render/backend URL |
 | Render | `PYTHON_VERSION` | `3.12.0` |
 | Render | `CORS_ORIGINS` | Your Vercel/frontend URL |
+| Supabase | Google OAuth Client ID \u0026 Secret | Configured in Dashboard → Auth → Providers → Google |
 
 ---
 

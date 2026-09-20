@@ -66,25 +66,53 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
   const [saveError, setSaveError] = useState<string | null>(null);
   const lastSavedProfileRef = useRef<CandidateProfile | null>(null);
   const profileLoadedForRef = useRef<string | null>(null);
+  const autoSelectionDoneRef = useRef<boolean>(false);
+  const [userManuallySelectedPreset, setUserManuallySelectedPreset] = useState(false);
 
-  // Auto-fill form from user's saved profile
+  // Auto-select default profile on mount or when user auth state changes.
+  // If the user has a saved profile with filled-in details, auto-load "My Profile".
+  // Otherwise, auto-load the first sample profile ("Gaurav Gupta").
+  // Once the user manually selects any preset, don't override their choice.
   useEffect(() => {
-    if (!user || profileLoadedForRef.current === user.id) return;
+    // Skip if the user has already manually selected a preset
+    if (userManuallySelectedPreset) return;
 
-    const loadProfile = async () => {
-      const data = await DatabaseService.getProfile(user.id);
-      if (data && (data.full_name || data.education_level || data.cgpa)) {
+    const performAutoSelection = async () => {
+      if (user && profileLoadedForRef.current !== user.id) {
+        // Check if user has a saved profile with meaningful data
+        const data = await DatabaseService.getProfile(user.id);
         profileLoadedForRef.current = user.id;
-        if (data.full_name) setFullName(data.full_name);
-        if (data.education_level) setEducationLevel(data.education_level);
-        if (data.branch) setBranch(data.branch);
-        if (data.cgpa) setCgpa(data.cgpa);
-        if (data.years_of_experience) setYearsOfExperience(data.years_of_experience);
+
+        if (data && (data.full_name || data.cgpa)) {
+          // User has a filled-in profile — auto-select "My Profile"
+          if (data.full_name) setFullName(data.full_name);
+          if (data.education_level) setEducationLevel(data.education_level);
+          if (data.branch) setBranch(data.branch);
+          if (data.cgpa) setCgpa(data.cgpa);
+          if (data.years_of_experience) setYearsOfExperience(data.years_of_experience);
+          autoSelectionDoneRef.current = true;
+          return;
+        }
+      }
+
+      // No user, or user has no/empty profile — auto-select first sample ("Gaurav Gupta")
+      if (!autoSelectionDoneRef.current) {
+        const firstSample = SAMPLE_PROFILES[0];
+        setFullName(firstSample.fullName);
+        setEducationLevel(firstSample.educationLevel);
+        setBranch(firstSample.branch);
+        setCgpa(firstSample.cgpa);
+        setTechnicalSkills(firstSample.technicalSkills);
+        setYearsOfExperience(firstSample.yearsOfExperience);
+        setCertifications(firstSample.certifications);
+        setTargetRole(firstSample.targetRole);
+        autoSelectionDoneRef.current = true;
       }
     };
 
-    loadProfile();
-  }, [user]);
+    performAutoSelection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, userManuallySelectedPreset]);
 
   // Sync if external role was clicked in the "Job Roles" section
   useEffect(() => {
@@ -166,6 +194,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
 
   // Load sample profile
   const loadSampleProfile = (sample: (typeof SAMPLE_PROFILES)[0]) => {
+    setUserManuallySelectedPreset(true);
     setFullName(sample.fullName);
     setEducationLevel(sample.educationLevel);
     setBranch(sample.branch);
@@ -180,6 +209,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
   // Load the authenticated user's saved profile into the form
   const loadMyProfile = async () => {
     if (!user) return;
+    setUserManuallySelectedPreset(true);
     const data = await DatabaseService.getProfile(user.id);
     if (data && (data.full_name || data.education_level || data.cgpa)) {
       if (data.full_name) setFullName(data.full_name);
