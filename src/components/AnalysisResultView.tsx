@@ -11,12 +11,16 @@ import {
   TrendUp,
   Clock,
   Lightning,
-  ArrowCounterClockwise
+  ArrowCounterClockwise,
+  ArrowSquareOut,
+  FilePdf
 } from '@phosphor-icons/react';
+import { getSkillResources, getFallbackSearchUrl } from '../data/skillResources';
 import { motion, useReducedMotion } from 'motion/react';
 import { EligibilityAnalysisResult } from '../types/eligibility';
 import { JOB_ROLES } from '../data/rolesData';
 import { TRANSITION_EASE, staggerContainerVariants, staggerItemVariants } from '../utils/motion';
+import { generatePDFReport } from '../utils/generateReport';
 
 interface AnalysisResultViewProps {
   result: EligibilityAnalysisResult;
@@ -233,6 +237,17 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" weight="bold" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" weight="bold" />}
             <span>{copied ? 'Report Copied' : 'Copy Report'}</span>
+          </motion.button>
+
+          <motion.button
+            whileHover={shouldReduceMotion ? {} : { y: -1 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => generatePDFReport(result)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white transition-all shadow-none"
+            title="Download PDF report"
+          >
+            <FilePdf className="w-3.5 h-3.5 text-zinc-500" weight="bold" />
+            <span>Download PDF</span>
           </motion.button>
 
           <motion.button
@@ -540,6 +555,38 @@ Generated via Job Eligibility Checker (API: ${result.backendContract.apiVersion}
                     <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
                       {gap.recommendationNote}
                     </p>
+                    {(() => {
+                      const resources = getSkillResources(gap.name);
+                      if (resources.length > 0) {
+                        return (
+                          <div className="flex flex-wrap gap-1.5 mt-1.5">
+                            {resources.map((res) => (
+                              <a
+                                key={res.url}
+                                href={res.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-50 dark:bg-cyan-950/30 text-cyan-700 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-800/50 hover:border-cyan-400 dark:hover:border-cyan-600 transition-colors"
+                              >
+                                <ArrowSquareOut className="w-2.5 h-2.5" weight="bold" />
+                                <span>{res.label}</span>
+                              </a>
+                            ))}
+                          </div>
+                        );
+                      }
+                      return (
+                        <a
+                          href={getFallbackSearchUrl(gap.name)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-500 dark:text-zinc-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                        >
+                          <ArrowSquareOut className="w-2.5 h-2.5" weight="bold" />
+                          <span>Search resources</span>
+                        </a>
+                      );
+                    })()}
                   </div>
                 </motion.div>
               ))
