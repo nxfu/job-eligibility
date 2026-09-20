@@ -5,10 +5,15 @@ import {
   Plus, 
   X, 
   WarningCircle,
-  ArrowCounterClockwise
+  ArrowCounterClockwise,
+  FloppyDisk,
+  SignIn,
+  Check
 } from '@phosphor-icons/react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { CandidateProfile, EligibilityAnalysisResult, JobRoleKey } from '../types/eligibility';
+import { useAuth } from '../context/AuthContext';
+import { DatabaseService } from '../services/databaseService';
 import { 
   JOB_ROLES, 
   EDUCATION_LEVELS, 
@@ -23,11 +28,13 @@ import { chipVariants, fadeInUpVariants, viewportConfig } from '../utils/motion'
 interface CheckerFormProps {
   selectedRoleFromExternal?: JobRoleKey | null;
   onRoleSelectionHandled?: () => void;
+  onOpenAuth?: (mode: 'signin' | 'signup') => void;
 }
 
 export const CheckerForm: React.FC<CheckerFormProps> = ({
   selectedRoleFromExternal,
-  onRoleSelectionHandled
+  onRoleSelectionHandled,
+  onOpenAuth
 }) => {
   const shouldReduceMotion = useReducedMotion();
   const isSubmittingRef = useRef<boolean>(false);
@@ -61,6 +68,33 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
   const [diagnosticPhase, setDiagnosticPhase] = useState<number>(0);
   const [analysisResult, setAnalysisResult] = useState<EligibilityAnalysisResult | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+
+  // Auth & save state
+  const { user } = useAuth();
+  const [savingResult, setSavingResult] = useState(false);
+  const [resultSaved, setResultSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const lastSavedProfileRef = useRef<CandidateProfile | null>(null);
+  const profileLoadedForRef = useRef<string | null>(null);
+
+  // Auto-fill form from user's saved profile
+  useEffect(() => {
+    if (!user || profileLoadedForRef.current === user.id) return;
+
+    const loadProfile = async () => {
+      const data = await DatabaseService.getProfile(user.id);
+      if (data) {
+        profileLoadedForRef.current = user.id;
+        if (data.full_name) setFullName(data.full_name);
+        if (data.education_level) setEducationLevel(data.education_level);
+        if (data.branch) setBranch(data.branch);
+        if (data.cgpa) setCgpa(data.cgpa);
+        if (data.years_of_experience) setYearsOfExperience(data.years_of_experience);
+      }
+    };
+
+    loadProfile();
+  }, [user]);
 
   // Sync if external role was clicked in the "Job Roles" section
   useEffect(() => {
@@ -153,10 +187,30 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
     setFormError(null);
   };
 
+  // Load the authenticated user's saved profile into the form
+  const loadMyProfile = async () => {
+    if (!user) return;
+    const data = await DatabaseService.getProfile(user.id);
+    if (data) {
+      if (data.full_name) setFullName(data.full_name);
+      if (data.education_level) setEducationLevel(data.education_level);
+      if (data.branch) setBranch(data.branch);
+      if (data.cgpa) setCgpa(data.cgpa);
+      if (data.years_of_experience) setYearsOfExperience(data.years_of_experience);
+      setFormError(null);
+    }
+  };
+
   // Submit profile for evaluation
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e && typeof e.preventDefault === 'function') {
       e.preventDefault();
+    }
+
+    // Require authentication
+    if (!user) {
+      onOpenAuth?.('signin');
+      return;
     }
 
     // Immediate synchronous guard against rapid repeated taps on mobile
@@ -207,6 +261,28 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
       
       // Store complete response in state immediately
       setAnalysisResult(result);
+
+      // Reset save state for each new result
+      setResultSaved(false);
+      setSaveError(null);
+      lastSavedProfileRef.current = profile;
+
+      // Auto-save for authenticated users
+      if (user) {
+        setSavingResult(true);
+        const { error: dbError } = await DatabaseService.saveResult(
+          user.id,
+          targetRole,
+          profile,
+          result
+        );
+        if (dbError) {
+          setSaveError(dbError.message);
+        } else {
+          setResultSaved(true);
+        }
+        setSavingResult(false);
+      }
     } catch (err: unknown) {
       const error = err as Error;
       setFormError(error?.message || 'Unable to complete the eligibility analysis right now. Please try again.');
@@ -221,6 +297,27 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
       setIsAnalyzing(false);
       setDiagnosticPhase(0);
     }
+  };
+
+  // Manual save for users who sign in after running an assessment
+  const handleSaveResult = async () => {
+    if (!user || !analysisResult || !lastSavedProfileRef.current || savingResult || resultSaved) return;
+    setSavingResult(true);
+    setSaveError(null);
+
+    const { error: dbError } = await DatabaseService.saveResult(
+      user.id,
+      lastSavedProfileRef.current.targetRole,
+      lastSavedProfileRef.current,
+      analysisResult
+    );
+
+    if (dbError) {
+      setSaveError(dbError.message);
+    } else {
+      setResultSaved(true);
+    }
+    setSavingResult(false);
   };
 
   const currentRole = JOB_ROLES[targetRole];
@@ -268,12 +365,44 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
             onReset={() => {
               setAnalysisResult(null);
               setFormError(null);
+              setResultSaved(false);
+              setSaveError(null);
             }}
             onEditProfile={() => {
               setAnalysisResult(null);
               setFormError(null);
+              setResultSaved(false);
+              setSaveError(null);
             }}
           />
+
+          {/* Save status bar */}
+          <div className="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+            {resultSaved ? (
+              <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-400 font-medium">
+                <Check className="w-4 h-4" weight="bold" />
+                <span>Assessment saved to your account</span>
+              </div>
+            ) : savingResult ? (
+              <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+                <div className="w-3.5 h-3.5 border-2 border-zinc-300 border-t-zinc-600 dark:border-zinc-700 dark:border-t-zinc-300 rounded-full animate-spin" />
+                <span>Saving assessment...</span>
+              </div>
+            ) : saveError ? (
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-xs text-rose-700 dark:text-rose-400">
+                  <WarningCircle className="w-4 h-4" weight="bold" />
+                  <span>Failed to save: {saveError}</span>
+                </div>
+                <button
+                  onClick={handleSaveResult}
+                  className="text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
       ) : (
         <div
@@ -287,6 +416,15 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
               <span>QUICK TEST PRESETS:</span>
             </div>
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
+              {user && (
+                <button
+                  type="button"
+                  onClick={loadMyProfile}
+                  className="px-2.5 py-1.5 rounded text-xs font-mono border border-cyan-300 dark:border-cyan-800 bg-cyan-50 dark:bg-cyan-950/40 text-cyan-800 dark:text-cyan-300 hover:border-cyan-500 dark:hover:border-cyan-600 hover:text-cyan-950 dark:hover:text-cyan-100 transition-colors active:scale-95 touch-manipulation min-h-[36px]"
+                >
+                  My Profile
+                </button>
+              )}
               {SAMPLE_PROFILES.map((sample) => (
                 <button
                   key={sample.name}
@@ -575,36 +713,59 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
             </div>
 
             {/* Primary Action Button with Immediate Multi-stage Diagnostic States */}
-            <div className="pt-4">
-              <button
-                id="btn-analyze-profile"
-                type="submit"
-                disabled={isAnalyzing}
-                aria-busy={isAnalyzing}
-                className="group w-full relative overflow-hidden flex items-center justify-center gap-2.5 py-3.5 px-6 rounded text-sm font-semibold tracking-wide bg-zinc-950 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-all duration-200 border border-zinc-950 dark:border-zinc-200 shadow-sm disabled:opacity-90 disabled:cursor-wait min-h-[48px] touch-manipulation"
-              >
-                {isAnalyzing ? (
-                  <div className="flex items-center gap-2.5 text-xs font-mono py-0.5 px-1 max-w-full">
-                    <div className="w-4 h-4 border-2 border-zinc-400 border-t-zinc-100 dark:border-zinc-600 dark:border-t-zinc-900 rounded-full animate-spin shrink-0"></div>
-                    <span className="tracking-wide truncate">
-                      {diagnosticPhaseLabels[diagnosticPhase] || 'Evaluating Profile...'}
-                    </span>
-                    <span className="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0"></span>
-                  </div>
-                ) : (
-                  <>
-                    <span>Evaluate Eligibility</span>
-                    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" weight="bold" />
-                  </>
-                )}
+            <div className="pt-4 space-y-3">
+              {user ? (
+                <button
+                  id="btn-analyze-profile"
+                  type="submit"
+                  disabled={isAnalyzing}
+                  aria-busy={isAnalyzing}
+                  className="group w-full relative overflow-hidden flex items-center justify-center gap-2.5 py-3.5 px-6 rounded text-sm font-semibold tracking-wide bg-zinc-950 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-all duration-200 border border-zinc-950 dark:border-zinc-200 shadow-sm disabled:opacity-90 disabled:cursor-wait min-h-[48px] touch-manipulation"
+                >
+                  {isAnalyzing ? (
+                    <div className="flex items-center gap-2.5 text-xs font-mono py-0.5 px-1 max-w-full">
+                      <div className="w-4 h-4 border-2 border-zinc-400 border-t-zinc-100 dark:border-zinc-600 dark:border-t-zinc-900 rounded-full animate-spin shrink-0"></div>
+                      <span className="tracking-wide truncate">
+                        {diagnosticPhaseLabels[diagnosticPhase] || 'Evaluating Profile...'}
+                      </span>
+                      <span className="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0"></span>
+                    </div>
+                  ) : (
+                    <>
+                      <span>Evaluate Eligibility</span>
+                      <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" weight="bold" />
+                    </>
+                  )}
 
-                {/* Subtle scanner bar while loading */}
-                {isAnalyzing && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-800 dark:bg-zinc-300 overflow-hidden">
-                    <div className="h-full bg-cyan-400 w-1/3 animate-pulse"></div>
-                  </div>
-                )}
-              </button>
+                  {/* Subtle scanner bar while loading */}
+                  {isAnalyzing && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-800 dark:bg-zinc-300 overflow-hidden">
+                      <div className="h-full bg-cyan-400 w-1/3 animate-pulse"></div>
+                    </div>
+                  )}
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => onOpenAuth?.('signin')}
+                    className="group w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded text-sm font-semibold tracking-wide bg-zinc-950 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-all duration-200 border border-zinc-950 dark:border-zinc-200 shadow-sm min-h-[48px] touch-manipulation"
+                  >
+                    <SignIn className="w-4 h-4" weight="bold" />
+                    <span>Sign In to Evaluate</span>
+                  </button>
+                  <p className="text-center text-[11px] text-zinc-500 dark:text-zinc-400">
+                    Create a free account to run assessments and save your results.{' '}
+                    <button
+                      type="button"
+                      onClick={() => onOpenAuth?.('signup')}
+                      className="underline hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
+                    >
+                      Sign Up
+                    </button>
+                  </p>
+                </>
+              )}
             </div>
 
           </form>

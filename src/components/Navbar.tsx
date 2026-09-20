@@ -1,17 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sun, Moon, ArrowRight, List, X } from '@phosphor-icons/react';
+import { Sun, Moon, ArrowRight, List, X, User, ClockCounterClockwise, SignOut, SignIn } from '@phosphor-icons/react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { TRANSITION_EASE } from '../utils/motion';
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  onNavigate?: (page: 'home' | 'profile' | 'history') => void;
+  onOpenAuth?: (mode: 'signin' | 'signup') => void;
+  currentPage?: string;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onNavigate, onOpenAuth, currentPage = 'home' }) => {
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const shouldReduceMotion = useReducedMotion();
   const isNavigatingRef = useRef(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,9 +47,37 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+    if (userMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [userMenuOpen]);
+
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
     setActiveSection(id);
+
+    // If not on home page, navigate to home first
+    if (currentPage !== 'home' && onNavigate) {
+      onNavigate('home');
+      // Wait for home page to render, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          const yOffset = -72;
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 100);
+      return;
+    }
 
     // Lock scroll spy so intermediate sections don't hijack the active pill
     isNavigatingRef.current = true;
@@ -51,6 +89,13 @@ export const Navbar: React.FC = () => {
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
+  };
+
+  const handleSignOut = async () => {
+    setUserMenuOpen(false);
+    setMobileMenuOpen(false);
+    await signOut();
+    if (onNavigate) onNavigate('home');
   };
 
   const navLinks = [
@@ -77,7 +122,13 @@ export const Navbar: React.FC = () => {
           {/* Brand Logo */}
           <div
             className="flex items-center gap-3 cursor-pointer group"
-            onClick={() => scrollToSection('hero')}
+            onClick={() => {
+              if (currentPage !== 'home' && onNavigate) {
+                onNavigate('home');
+              } else {
+                scrollToSection('hero');
+              }
+            }}
           >
             <div className="h-8 w-8 rounded flex items-center justify-center shadow-sm transition-transform duration-200 group-hover:scale-105 overflow-hidden">
               <img src={theme === 'dark' ? '/favicon-dark.png' : '/favicon-light.png'} alt="Logo" className="w-8 h-8 object-contain" />
@@ -95,7 +146,7 @@ export const Navbar: React.FC = () => {
           {/* Desktop Navigation Links */}
           <nav role="navigation" aria-label="Main navigation" className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = activeSection === link.id;
+              const isActive = currentPage === 'home' && activeSection === link.id;
               return (
                 <button
                   key={link.id}
@@ -132,6 +183,74 @@ export const Navbar: React.FC = () => {
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" weight="bold" /> : <Moon className="w-4 h-4" weight="bold" />}
             </motion.button>
+
+            {user ? (
+              /* Authenticated: User menu dropdown */
+              <div className="relative" ref={userMenuRef}>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="w-8 h-8 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors"
+                  aria-label="User menu"
+                >
+                  <User className="w-4 h-4" weight="bold" />
+                </motion.button>
+
+                <AnimatePresence>
+                  {userMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -4, scale: 0.95 }}
+                      transition={{ duration: 0.15, ease: TRANSITION_EASE }}
+                      className="absolute right-0 top-full mt-2 w-56 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-lg py-1.5 z-50"
+                    >
+                      {/* User email */}
+                      <div className="px-3 py-2 border-b border-zinc-200 dark:border-zinc-800">
+                        <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400 truncate">{user.email}</p>
+                      </div>
+
+                      <button
+                        onClick={() => { setUserMenuOpen(false); onNavigate?.('profile'); }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                      >
+                        <User className="w-3.5 h-3.5 text-zinc-500" weight="bold" />
+                        <span>Profile</span>
+                      </button>
+
+                      <button
+                        onClick={() => { setUserMenuOpen(false); onNavigate?.('history'); }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                      >
+                        <ClockCounterClockwise className="w-3.5 h-3.5 text-zinc-500" weight="bold" />
+                        <span>Assessment History</span>
+                      </button>
+
+                      <div className="border-t border-zinc-200 dark:border-zinc-800 mt-1 pt-1">
+                        <button
+                          onClick={handleSignOut}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-600 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                        >
+                          <SignOut className="w-3.5 h-3.5" weight="bold" />
+                          <span>Sign Out</span>
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              /* Unauthenticated: Sign In button */
+              <motion.button
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => onOpenAuth?.('signin')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded text-xs font-medium border border-zinc-200 dark:border-zinc-800 text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+              >
+                <SignIn className="w-3.5 h-3.5" weight="bold" />
+                <span>Sign In</span>
+              </motion.button>
+            )}
 
             {/* Get Started Button */}
             <motion.button
@@ -190,6 +309,43 @@ export const Navbar: React.FC = () => {
                 {link.label}
               </button>
             ))}
+
+            {/* Auth items in mobile */}
+            <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800 space-y-2">
+              {user ? (
+                <>
+                  <div className="px-2 py-1 text-[11px] font-mono text-zinc-500 dark:text-zinc-400 truncate">
+                    {user.email}
+                  </div>
+                  <button
+                    onClick={() => { setMobileMenuOpen(false); onNavigate?.('profile'); }}
+                    className="block w-full text-left py-2 px-2 rounded text-sm text-zinc-700 dark:text-zinc-300 font-medium hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                  >
+                    Profile
+                  </button>
+                  <button
+                    onClick={() => { setMobileMenuOpen(false); onNavigate?.('history'); }}
+                    className="block w-full text-left py-2 px-2 rounded text-sm text-zinc-700 dark:text-zinc-300 font-medium hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                  >
+                    Assessment History
+                  </button>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-left py-2 px-2 rounded text-sm text-rose-600 dark:text-rose-400 font-medium hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => { setMobileMenuOpen(false); onOpenAuth?.('signin'); }}
+                  className="block w-full text-left py-2 px-2 rounded text-sm text-zinc-700 dark:text-zinc-300 font-medium hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+                >
+                  Sign In
+                </button>
+              )}
+            </div>
+
             <div className="pt-2">
               <button
                 onClick={() => scrollToSection('checker')}
