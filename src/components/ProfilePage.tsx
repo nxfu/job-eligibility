@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, FloppyDisk, Check, WarningCircle, SignOut } from '@phosphor-icons/react';
 import { motion } from 'motion/react';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { DatabaseService } from '../services/databaseService';
 import { Profile } from '../types/database';
 import { EDUCATION_LEVELS, BRANCH_OPTIONS, EXPERIENCE_LEVELS } from '../data/rolesData';
@@ -13,6 +14,7 @@ interface ProfilePageProps {
 
 export const ProfilePage: React.FC<ProfilePageProps> = ({ onBack }) => {
   const { user, signOut } = useAuth();
+  const { showToast } = useToast();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -40,6 +42,11 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onBack }) => {
         setCgpa(data.cgpa ?? '');
         setYearsOfExperience(data.years_of_experience ?? '0');
       }
+
+      if (!data?.full_name && user.user_metadata?.full_name) {
+        setFullName(user.user_metadata.full_name);
+      }
+
       setLoading(false);
     };
 
@@ -64,6 +71,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onBack }) => {
       setError(saveError.message);
     } else {
       setSuccess('Profile saved successfully.');
+      showToast('Profile saved successfully', 'success');
       setTimeout(() => setSuccess(null), 3000);
     }
     setSaving(false);
@@ -74,6 +82,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ onBack }) => {
     if (signOutError) {
       setError(signOutError.message);
     } else {
+      showToast('Signed out successfully', 'info');
       onBack();
     }
   };

@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { TRANSITION_EASE } from '../utils/motion';
 
 interface NavbarProps {
@@ -15,6 +16,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onNavigate, onOpenAuth, currentPage = 'home' }) => {
   const { theme, toggleTheme } = useTheme();
   const { user, signOut } = useAuth();
+  const { showToast } = useToast();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -95,6 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, onOpenAuth, currentP
     setUserMenuOpen(false);
     setMobileMenuOpen(false);
     await signOut();
+    showToast('Signed out successfully', 'info');
     if (onNavigate) onNavigate('home');
   };
 
