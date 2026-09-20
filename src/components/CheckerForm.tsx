@@ -42,24 +42,14 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Form state
-  const [fullName, setFullName] = useState('Gaurav Gupta');
+  const [fullName, setFullName] = useState('');
   const [educationLevel, setEducationLevel] = useState(EDUCATION_LEVELS[0]);
   const [branch, setBranch] = useState(BRANCH_OPTIONS[0]);
-  const [cgpa, setCgpa] = useState('8.6');
-  const [technicalSkills, setTechnicalSkills] = useState<string[]>([
-    'Python',
-    'PyTorch',
-    'Scikit-Learn',
-    'FastAPI',
-    'SQL',
-    'Docker',
-    'Git'
-  ]);
+  const [cgpa, setCgpa] = useState('');
+  const [technicalSkills, setTechnicalSkills] = useState<string[]>([]);
   const [newSkillInput, setNewSkillInput] = useState('');
-  const [yearsOfExperience, setYearsOfExperience] = useState('2');
-  const [certifications, setCertifications] = useState<string[]>([
-    'DeepLearning.AI TensorFlow Specialization'
-  ]);
+  const [yearsOfExperience, setYearsOfExperience] = useState('0');
+  const [certifications, setCertifications] = useState<string[]>([]);
   const [newCertInput, setNewCertInput] = useState('');
   const [targetRole, setTargetRole] = useState<JobRoleKey>('machine-learning-engineer');
 
@@ -83,7 +73,7 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
 
     const loadProfile = async () => {
       const data = await DatabaseService.getProfile(user.id);
-      if (data) {
+      if (data && (data.full_name || data.education_level || data.cgpa)) {
         profileLoadedForRef.current = user.id;
         if (data.full_name) setFullName(data.full_name);
         if (data.education_level) setEducationLevel(data.education_level);
@@ -191,13 +181,15 @@ export const CheckerForm: React.FC<CheckerFormProps> = ({
   const loadMyProfile = async () => {
     if (!user) return;
     const data = await DatabaseService.getProfile(user.id);
-    if (data) {
+    if (data && (data.full_name || data.education_level || data.cgpa)) {
       if (data.full_name) setFullName(data.full_name);
       if (data.education_level) setEducationLevel(data.education_level);
       if (data.branch) setBranch(data.branch);
       if (data.cgpa) setCgpa(data.cgpa);
       if (data.years_of_experience) setYearsOfExperience(data.years_of_experience);
       setFormError(null);
+    } else {
+      setFormError('Your profile is empty. Go to Profile from the menu to save your details first, or use a sample preset below.');
     }
   };
 
