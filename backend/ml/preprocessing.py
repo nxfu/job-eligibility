@@ -79,7 +79,7 @@ def score_branch_alignment(branch_str: str, target_role_key: str) -> float:
             return 1.0
     
     # Check adjacent technical branches
-    tech_keywords = ["computer", "it", "technology", "data", "software", "electronic", "electrical", "engineering"]
+    tech_keywords = ["computer", "it", "technology", "data", "software", "electronic", "ai", "machine learning", "engineering"]
     if any(k in branch_lower for k in tech_keywords):
         return 0.75
     

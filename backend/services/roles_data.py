@@ -10,7 +10,7 @@ JOB_ROLES: Dict[str, Dict[str, Any]] = {
         "keySkills": ["Python", "FastAPI", "Django", "PostgreSQL", "Docker", "Git", "REST APIs", "Redis"],
         "niceToHaveSkills": ["Celery", "Kubernetes", "AWS", "GraphQL", "Pytest", "CI/CD"],
         "minimumEducation": ["Bachelor's Degree", "Master's Degree"],
-        "preferredBranches": ["Computer Science", "Information Technology", "Software Engineering", "Electrical & Computer"],
+        "preferredBranches": ["Computer Science", "Information Technology", "Software Engineering", "AI & Machine Learning"],
         "benchmarkExperienceYears": 2,
         "marketDemand": "High",
         "avgSalaryRange": "$95,000 - $145,000"
@@ -38,7 +38,7 @@ JOB_ROLES: Dict[str, Dict[str, Any]] = {
         "keySkills": ["Python", "PyTorch", "TensorFlow", "Scikit-Learn", "MLOps", "Docker", "FastAPI", "Vector Databases"],
         "niceToHaveSkills": ["Kubeflow", "MLflow", "CUDA", "Transformer Architecture", "Hugging Face", "AWS SageMaker"],
         "minimumEducation": ["Bachelor's Degree", "Master's Degree", "Doctorate"],
-        "preferredBranches": ["Computer Science", "Artificial Intelligence", "Data Science", "Electrical Engineering", "Robotics"],
+        "preferredBranches": ["Computer Science", "Artificial Intelligence", "Data Science", "AI & Machine Learning", "Robotics"],
         "benchmarkExperienceYears": 2,
         "marketDemand": "Critical",
         "avgSalaryRange": "$125,000 - $185,000"
